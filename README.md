@@ -49,7 +49,7 @@ Name the database: "capstone"
 ###  Create tables
 ```
 CREATE TABLE person (
-	birthday DATE,
+    birthday DATE,
     email VARCHAR(100) NULL,
     phone VARCHAR(100),
     first_name VARCHAR(100) NULL,
@@ -75,8 +75,8 @@ CREATE TABLE doctor(
 );
 
 CREATE TABLE clinic(
-	id VARCHAR(100) NOT NULL PRIMARY KEY,
-	name VARCHAR(100),
+    id VARCHAR(100) NOT NULL PRIMARY KEY,
+    name VARCHAR(100),
     postal_code VARCHAR(100),
     province VARCHAR(100),
     city VARCHAR(100),
@@ -86,8 +86,8 @@ CREATE TABLE clinic(
 );
 
 CREATE TABLE appointment(
-	id VARCHAR(100) NOT NULL PRIMARY KEY,
-	doctor_id VARCHAR(100),
+    id VARCHAR(100) NOT NULL PRIMARY KEY,
+    doctor_id VARCHAR(100),
     patient_id VARCHAR(100),
     schedule_date VARCHAR(100),
     appointment_name VARCHAR(100),
