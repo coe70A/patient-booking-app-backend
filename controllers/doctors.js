@@ -25,7 +25,7 @@ const registerDoctor = async (req, res) => {
 
 const fetchDoctorAppointments = async (req, res) => {
   try {
-    const doctorId = req.params.doctor_id;
+    const doctorId = req.params.doctor_id
 
     console.log('DOCTOR ID')
     console.log(doctorId)
@@ -44,7 +44,29 @@ const fetchDoctorAppointments = async (req, res) => {
   }
 }
 
+const updateAppointment = async (req, res) => {
+  try {
+    const appointmentId = req.params.appointment_id
+
+    const task = await db.fetchAppointment(appointmentId)
+
+    // TODO: We should different error codes. Right now we throw 500 for everything
+    if (task.length === 0) { throw Error(`Unable to find appointment id ${appointmentId}`) }
+
+    const { illnesses } = req.body
+
+    await db.updateTask(appointmentId, { ...req.body, illnesses: illnesses?.join() })
+
+    res.status(200).send()
+  } catch (err) {
+    console.log('Encountered error updating tasks', err)
+
+    res.status(500).send('server_error')
+  }
+}
+
 module.exports = {
   registerDoctor,
-  fetchDoctorAppointments
+  fetchDoctorAppointments,
+  updateAppointment
 }

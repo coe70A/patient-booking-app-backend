@@ -32,7 +32,9 @@ const schemas = {
     patient_id: Joi.string(),
     schedule_date: Joi.string(),
     appointment_name: Joi.string(),
-    description: Joi.string()
+    description: Joi.string(),
+    illnesses: Joi.string().allow(null),
+    is_complete: Joi.boolean()
   })
 }
 

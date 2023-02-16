@@ -3,6 +3,8 @@ const PostgresPool = require('pg').Pool
 const dotenv = require('dotenv')
 const { v4: uuidv4 } = require('uuid')
 
+const { generateUpdateTaskQuery } = require('./utils/utils.js')
+
 dotenv.config()
 
 const instance = null
@@ -124,6 +126,44 @@ class DbService {
     } catch (error) {
       console.log(error.message)
       throw error
+    }
+  }
+
+  async fetchAppointment (appointmentId) {
+    try {
+      const response = await new Promise((resolve, reject) => {
+        const query = 'SELECT * FROM appointment WHERE id = $1'
+        connection.query(query, [appointmentId], (error, result) => {
+          if (error) {
+            reject(new Error(error.message))
+          } else {
+            resolve(result.rows)
+          }
+        })
+      })
+      return response
+    } catch (error) {
+      console.log(error.message)
+      throw error
+    }
+  }
+
+  async updateTask (id, props) {
+    const { query, values } = generateUpdateTaskQuery(id, props)
+
+    try {
+      const response = await new Promise((resolve, reject) => {
+        connection.query(query, values, (error, result) => {
+          if (error) {
+            reject(error)
+          } else {
+            resolve(result)
+          }
+        })
+      })
+      return response
+    } catch (error) {
+      console.log(error)
     }
   }
 
