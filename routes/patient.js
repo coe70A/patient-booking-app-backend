@@ -11,4 +11,7 @@ router.post('/register', verifyPatientRegistration, registerUser)
 // POST /api/patient/appointment
 router.post('/appointment', verifyCreateAppointment, createAppointment)
 
+// GET /api/patient/appointment
+router.post('/{patient_id/appointment', verifyCreateAppointment, createAppointment)
+
 module.exports = router

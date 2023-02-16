@@ -97,11 +97,49 @@ class DbService {
           if (error) {
             reject(new Error(error.message))
           } else {
-            resolve(result.insertId)
+            resolve(result.rows[0])
           }
         })
       })
       return insertId
+    } catch (error) {
+      console.log(error.message)
+      throw error
+    }
+  }
+
+  async fetchDoctorAppointments (doctorId) {
+    try {
+      const response = await new Promise((resolve, reject) => {
+        const query = 'SELECT * FROM appointments WHERE doctor_id = $1'
+        connection.query(query, [doctorId], (error, result) => {
+          if (error) {
+            reject(new Error(error.message))
+          } else {
+            resolve(result.rows)
+          }
+        })
+      })
+      return response
+    } catch (error) {
+      console.log(error.message)
+      throw error
+    }
+  }
+
+  async fetchPatientAppointments (patientId) {
+    try {
+      const response = await new Promise((resolve, reject) => {
+        const query = 'SELECT * FROM appointments WHERE patient_id = $1'
+        connection.query(query, [patientId], (error, result) => {
+          if (error) {
+            reject(new Error(error.message))
+          } else {
+            resolve(result.rows)
+          }
+        })
+      })
+      return response
     } catch (error) {
       console.log(error.message)
       throw error
@@ -115,7 +153,7 @@ class DbService {
       await this.registerUser(prop)
 
       const insertId = await new Promise((resolve, reject) => {
-        const query = 'INSERT INTO patient (ohip_number, doctor_id) VALUES ($1, $2) RETURNING *'
+        const query = 'INSERT INTO patient (ohip_number, email, doctor_id) VALUES ($1, $2, $3) RETURNING *'
         connection.query(query, [ohip_number, email, doctor_id], (error, result) => {
           if (error) {
             reject(new Error(error.message))
@@ -132,14 +170,12 @@ class DbService {
   }
 
   async createAppointment (prop) {
-    const { doctor_id, patient_id, schedule_date, creation_date, appointment_name, description } = prop
+    const { doctor_id, patient_id, schedule_date, appointment_name, description } = prop
 
     try {
-      await this.registerUser(prop)
-
       const insertId = await new Promise((resolve, reject) => {
-        const query = 'INSERT INTO appointment (doctor_id, patient_id, schedule_date, creation_date, appointment_name, description) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *'
-        connection.query(query, [doctor_id, patient_id, schedule_date, creation_date, appointment_name, description], (error, result) => {
+        const query = 'INSERT INTO appointment (id, doctor_id, patient_id, schedule_date, appointment_name, description) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *'
+        connection.query(query, [uuidv4(), doctor_id, patient_id, schedule_date, appointment_name, description], (error, result) => {
           if (error) {
             reject(new Error(error.message))
           } else {

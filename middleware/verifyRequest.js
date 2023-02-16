@@ -28,12 +28,10 @@ const schemas = {
     })
   }),
   createAppointment: Joi.object({
-    id: Joi.string(),
     doctor_id: Joi.string(),
     patient_id: Joi.string(),
     schedule_date: Joi.string(),
     appointment_name: Joi.string(),
-    created_date: Joi.string(),
     description: Joi.string()
   })
 }
