@@ -49,12 +49,31 @@ Name the database: "capstone"
 ###  Create tables
 ```
 CREATE TABLE person (
-    birthday DATE,
+	birthday DATE,
     email VARCHAR(100) NULL,
     phone VARCHAR(100),
     first_name VARCHAR(100) NULL,
     last_name VARCHAR(100) NULL,
     PRIMARY KEY (email)
+);
+
+CREATE TABLE clinic(
+	id VARCHAR(100) NOT NULL PRIMARY KEY,
+	name VARCHAR(100),
+    postal_code VARCHAR(100),
+    province VARCHAR(100),
+    city VARCHAR(100),
+    country VARCHAR(100),
+    street_number INT,
+    street_name VARCHAR(100)
+);
+
+CREATE TABLE doctor(
+    id VARCHAR(100) NOT NULL PRIMARY KEY,
+    email VARCHAR(100) not NULL,
+    clinic_id VARCHAR(100),
+    FOREIGN KEY(email) REFERENCES person(email) ON DELETE SET NULL,
+    FOREIGN KEY(clinic_id) REFERENCES clinic(id) ON DELETE SET NULL
 );
 
 
@@ -66,33 +85,16 @@ CREATE TABLE patient(
     FOREIGN KEY(doctor_id) REFERENCES doctor(id) ON DELETE SET NULL
 );
 
-CREATE TABLE doctor(
-    id VARCHAR(100) NOT NULL PRIMARY KEY,
-    email VARCHAR(100) not NULL,
-    clinic_id VARCHAR(100),
-    FOREIGN KEY(email) REFERENCES person(email) ON DELETE SET NULL,
-    FOREIGN KEY(clinic_id) REFERENCES clinic(id) ON DELETE SET NULL
-);
-
-CREATE TABLE clinic(
-    id VARCHAR(100) NOT NULL PRIMARY KEY,
-    name VARCHAR(100),
-    postal_code VARCHAR(100),
-    province VARCHAR(100),
-    city VARCHAR(100),
-    country VARCHAR(100),
-    street_number INT,
-    street_name VARCHAR(100)
-);
-
 CREATE TABLE appointment(
-    id VARCHAR(100) NOT NULL PRIMARY KEY,
-    doctor_id VARCHAR(100),
+	id VARCHAR(100) NOT NULL PRIMARY KEY,
+	doctor_id VARCHAR(100),
     patient_id VARCHAR(100),
-    schedule_date VARCHAR(100),
+    schedule_date VARCHAR(100) null,
     appointment_name VARCHAR(100),
-    description TEXT,
-    created VARCHAR(100),
+    description TEXT null,
+    illnesses TEXT null,
+    is_complete boolean null,
+    created VARCHAR(100) null,
     FOREIGN KEY(patient_id) REFERENCES patient(ohip_number) ON DELETE SET NULL,
     FOREIGN KEY(doctor_id) REFERENCES doctor(id) ON DELETE SET NULL
 );
