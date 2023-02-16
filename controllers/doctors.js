@@ -25,7 +25,10 @@ const registerDoctor = async (req, res) => {
 
 const fetchDoctorAppointments = async (req, res) => {
   try {
-    const doctorId = req.query.doctor_id
+    const doctorId = req.params.doctor_id;
+
+    console.log('DOCTOR ID')
+    console.log(doctorId)
 
     if (!doctorId) res.status(400).send({ code: 400, error: 'invalid_request' })
 
