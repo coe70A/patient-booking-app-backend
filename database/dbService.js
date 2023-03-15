@@ -87,6 +87,25 @@ class DbService {
     }
   }
 
+  async fetchUser (email) {
+    try {
+      const response = await new Promise((resolve, reject) => {
+        const query = 'SELECT * FROM person WHERE email = $1 ;'
+        connection.query(query, [email], (error, result) => {
+          if (error) {
+            reject(error)
+          } else {
+            resolve(result.rows[0])
+          }
+        })
+      })
+      return response
+    } catch (error) {
+      console.log(error)
+      throw error
+    }
+  }
+
   async registerDoctor (prop, clinicId) {
     const { email } = prop
 
@@ -176,6 +195,44 @@ class DbService {
             reject(new Error(error.message))
           } else {
             resolve(result.rows)
+          }
+        })
+      })
+      return response
+    } catch (error) {
+      console.log(error.message)
+      throw error
+    }
+  }
+
+  async fetchDoctor (email) {
+    try {
+      const response = await new Promise((resolve, reject) => {
+        const query = 'SELECT * FROM person p JOIN doctor d on d.email = p.email JOIN clinic c ON c.id = d.clinic_id WHERE p.email = $1;'
+        connection.query(query, [email], (error, result) => {
+          if (error) {
+            reject(new Error(error.message))
+          } else {
+            resolve(result.rows[0])
+          }
+        })
+      })
+      return response
+    } catch (error) {
+      console.log(error.message)
+      throw error
+    }
+  }
+
+  async fetchPatient (email) {
+    try {
+      const response = await new Promise((resolve, reject) => {
+        const query = 'SELECT * FROM person p JOIN patient pa ON pa.email = p.email WHERE p.email = $1;'
+        connection.query(query, [email], (error, result) => {
+          if (error) {
+            reject(new Error(error.message))
+          } else {
+            resolve(result.rows[0])
           }
         })
       })

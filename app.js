@@ -4,6 +4,7 @@ const cors = require('cors')
 
 const patientRoutes = require('./routes/patient')
 const doctorRoutes = require('./routes/doctor')
+const userRoutes = require('./routes/user')
 
 const app = express()
 
@@ -16,6 +17,7 @@ app.use(cors())
 // Routes
 app.use('/api/patient', patientRoutes)
 app.use('/api/doctor', doctorRoutes)
+app.use('/api/user', userRoutes)
 
 const port = 5000
 
