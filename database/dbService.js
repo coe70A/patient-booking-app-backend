@@ -26,11 +26,11 @@ class DbService {
   }
 
   async registerUser (prop) {
-    const { email, first_name, last_name, phone, birthday } = prop
+    const { email, first_name, last_name, phone, birthday, is_patient } = prop
 
     const insertId = await new Promise((resolve, reject) => {
-      const query1 = 'INSERT INTO person (email, first_name, last_name, phone, birthday) VALUES ($1, $2, $3, $4, $5) RETURNING *'
-      connection.query(query1, [email, first_name, last_name, phone, birthday], (error, result) => {
+      const query1 = 'INSERT INTO person (email, first_name, last_name, phone, birthday, is_patient) VALUES ($1, $2, $3, $4, $5) RETURNING *'
+      connection.query(query1, [email, first_name, last_name, phone, birthday, is_patient], (error, result) => {
         if (error) {
           reject(new Error(error.message))
         } else {
@@ -110,7 +110,7 @@ class DbService {
     const { email } = prop
 
     try {
-      await this.registerUser(prop)
+      await this.registerUser({ ...prop, is_patient: false })
 
       const insertId = await new Promise((resolve, reject) => {
         const query = 'INSERT INTO doctor (id, email, clinic_id) VALUES ($1, $2, $3) RETURNING *'
@@ -247,7 +247,7 @@ class DbService {
     const { ohip_number, email, doctor_id } = prop
 
     try {
-      await this.registerUser(prop)
+      await this.registerUser({ ...prop, is_patient: true })
 
       const insertId = await new Promise((resolve, reject) => {
         const query = 'INSERT INTO patient (ohip_number, email, doctor_id) VALUES ($1, $2, $3) RETURNING *'
