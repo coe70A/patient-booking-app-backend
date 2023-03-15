@@ -224,6 +224,25 @@ class DbService {
     }
   }
 
+  async fetchAllDoctors () {
+    try {
+      const response = await new Promise((resolve, reject) => {
+        const query = 'SELECT p.*, d.*, c.name as clinic_name, c.postal_code as clinic_postal_code, c.city as clinic_city, c.province as clinic_province, c.country as clinic_country FROM person p JOIN doctor d on d.email = p.email JOIN clinic c ON c.id = d.clinic_id;'
+        connection.query(query, (error, result) => {
+          if (error) {
+            reject(new Error(error.message))
+          } else {
+            resolve(result.rows[0])
+          }
+        })
+      })
+      return response
+    } catch (error) {
+      console.log(error.message)
+      throw error
+    }
+  }
+
   async fetchPatient (email) {
     try {
       const response = await new Promise((resolve, reject) => {

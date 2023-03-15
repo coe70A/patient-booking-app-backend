@@ -44,6 +44,22 @@ const fetchDoctorAppointments = async (req, res) => {
   }
 }
 
+const fetchDoctors = async (req, res) => {
+  try {
+    const doctors = await db.fetchAllDoctors()
+
+    if (!doctors) res.status(400).send({ error: 'no_doctors_found' })
+
+    console.log(doctors)
+
+    res.status(200).send({ data: doctors })
+  } catch (err) {
+    console.log('Encountered error fetching doctor appointments', err)
+
+    res.status(500).send({ code: 500, error: 'server_error' })
+  }
+}
+
 const updateAppointment = async (req, res) => {
   try {
     const appointmentId = req.params.appointment_id
@@ -68,5 +84,6 @@ const updateAppointment = async (req, res) => {
 module.exports = {
   registerDoctor,
   fetchDoctorAppointments,
-  updateAppointment
+  updateAppointment,
+  fetchDoctors
 }
