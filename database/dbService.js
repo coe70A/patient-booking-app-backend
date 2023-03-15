@@ -198,7 +198,7 @@ class DbService {
           if (error) {
             reject(new Error(error.message))
           } else {
-            resolve(result.insertId)
+            resolve(result.rows[0])
           }
         })
       })

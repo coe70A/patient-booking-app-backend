@@ -4,9 +4,9 @@ const db = dbService.getDbServiceInstance()
 
 const registerUser = async (req, res) => {
   try {
-    await db.registerPatient(req.body)
+    const patient = await db.registerPatient(req.body)
 
-    res.status(200).send({ code: 200 })
+    res.status(200).send({ code: 200, data: patient })
   } catch (err) {
     console.log('Encountered error registering user', err)
 
