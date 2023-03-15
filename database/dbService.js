@@ -29,7 +29,7 @@ class DbService {
     const { email, first_name, last_name, phone, birthday, is_patient } = prop
 
     const insertId = await new Promise((resolve, reject) => {
-      const query1 = 'INSERT INTO person (email, first_name, last_name, phone, birthday, is_patient) VALUES ($1, $2, $3, $4, $5) RETURNING *'
+      const query1 = 'INSERT INTO person (email, first_name, last_name, phone, birthday, is_patient) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *'
       connection.query(query1, [email, first_name, last_name, phone, birthday, is_patient], (error, result) => {
         if (error) {
           reject(new Error(error.message))
