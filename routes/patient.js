@@ -1,6 +1,6 @@
 const express = require('express')
 
-const { registerUser, createAppointment } = require('../controllers/patients.js')
+const { registerUser, createAppointment, fetchPatientAppointments } = require('../controllers/patients.js')
 const { verifyPatientRegistration, verifyCreateAppointment } = require('../middleware/verifyRequest')
 
 const router = express.Router()
@@ -13,5 +13,8 @@ router.post('/appointment', verifyCreateAppointment, createAppointment)
 
 // GET /api/patient/appointment
 router.post('/{patient_id/appointment', verifyCreateAppointment, createAppointment)
+
+// GET /api/doctor/{doctor_id}/appointments
+router.get('/:patient_id/appointment', fetchPatientAppointments)
 
 module.exports = router
