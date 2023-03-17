@@ -208,7 +208,7 @@ class DbService {
   async fetchDoctor (email) {
     try {
       const response = await new Promise((resolve, reject) => {
-        const query = 'SELECT * FROM person p JOIN doctor d on d.email = p.email JOIN clinic c ON c.id = d.clinic_id WHERE p.email = $1;'
+        const query = 'SELECT d.id as doctor_id, * FROM person p JOIN doctor d on d.email = p.email JOIN clinic c ON c.id = d.clinic_id WHERE p.email = $1;'
         connection.query(query, [email], (error, result) => {
           if (error) {
             reject(new Error(error.message))
