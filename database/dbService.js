@@ -189,7 +189,7 @@ class DbService {
   async fetchPatientAppointments (patientId) {
     try {
       const response = await new Promise((resolve, reject) => {
-        const query = 'SELECT * FROM appointments WHERE patient_id = $1'
+        const query = 'SELECT * FROM appointment WHERE patient_id = $1'
         connection.query(query, [patientId], (error, result) => {
           if (error) {
             reject(new Error(error.message))

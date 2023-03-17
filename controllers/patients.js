@@ -29,11 +29,14 @@ const createAppointment = async (req, res) => {
 
 const fetchPatientAppointments = async (req, res) => {
   try {
-    const patientId = req.query.patient_id
+    const patientId = req.params.patient_id
+
+    console.log('Patient ID')
+    console.log(patientId)
 
     if (!patientId) res.status(400).send({ code: 400, error: 'invalid_request' })
 
-    const appointments = await db.fetchDoctorAppointments(patientId)
+    const appointments = await db.fetchPatientAppointments(patientId)
 
     console.log(appointments)
 
