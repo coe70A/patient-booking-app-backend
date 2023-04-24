@@ -34,6 +34,10 @@ const fetchDoctorAppointments = async (req, res) => {
 
     const appointments = await db.fetchDoctorAppointments(doctorId)
 
+    // const app = {
+    //   app.
+    // }
+
     console.log(appointments)
 
     res.status(200).send({ code: 200, doctor_id: doctorId, appointments })
@@ -60,18 +64,102 @@ const fetchDoctors = async (req, res) => {
   }
 }
 
+const checkIfAppointmentFallsWithinSchedule = (appointments, givenAppointment) => {
+  console.log('INSIDE CHECK')
+  const dateBeforeParse = new Date(givenAppointment)
+  const givenScheduleDate = new Date(dateBeforeParse.getFullYear(), dateBeforeParse.getMonth(), dateBeforeParse.getDate(), dateBeforeParse.getHours(), dateBeforeParse.getMinutes(), 0, 0) // Create a new Date object without seconds and milliseconds
+
+  console.log('HEJWAHDKJHAWJKDHAWKJDHKJAWHDjk')
+  console.log(givenScheduleDate)
+  // givenScheduleDate.setSeconds(0)
+  for (let i = 0; i < appointments.length; i++) {
+    const appointment = appointments[i]
+    if (appointment.schedule_date) {
+      // const apptDate = appointment.schedule_date
+      const apptDate = new Date(appointment.schedule_date)
+      const appointmentScheduleDate = new Date(apptDate.getFullYear(), apptDate.getMonth(), apptDate.getDate(), apptDate.getHours(), apptDate.getMinutes(), 0, 0) // Create a new Date object without seconds and milliseconds
+      // appointmentScheduleDate.setSeconds(0)
+      console.log(appointmentScheduleDate)
+
+      console.log('given: ', givenScheduleDate.toDateString())
+      console.log('compare to : ', appointmentScheduleDate.toDateString())
+      if (givenScheduleDate.toDateString() === appointmentScheduleDate.toDateString()) {
+        console.log('FOUND ONE')
+        console.log('givenScheduleDate')
+        console.log(givenScheduleDate)
+        console.log('appointmentScheduleDate')
+        console.log(appointmentScheduleDate)
+        console.log(appointment)
+        return true // Given appointment falls within the schedule date
+      }
+    }
+  }
+  return false // Given appointment does not fall within the schedule date
+}
+
 const updateAppointment = async (req, res) => {
   try {
     const appointmentId = req.params.appointment_id
 
     const task = await db.fetchAppointment(appointmentId)
 
+    console.log('INSIDE UPDATEW APPOINTYMENT')
+
     // TODO: We should different error codes. Right now we throw 500 for everything
     if (task.length === 0) { throw Error(`Unable to find appointment id ${appointmentId}`) }
 
-    const { illnesses } = req.body
+    // eslint-disable-next-line camelcase
+    const { illnesses, schedule_date } = req.body
+    console.log('ILLNESS')
+    console.log(illnesses)
+
+    console.log('TASKKKKK')
+    console.log(task)
+
+    console.log('req.body')
+    console.log(req.body)
+
+    const appt = task[0]
+
+    if (req.body.schedule_date) {
+      const doctorApp = await db.fetchDoctorAppointments(appt.doctor_id)
+      console.log('DOCTOR APP')
+      console.log(doctorApp)
+
+      console.log('APPTTTT')
+      console.log(appt)
+
+      const result = checkIfAppointmentFallsWithinSchedule(doctorApp, schedule_date)
+
+      console.log('THIS IS THE RESULT')
+      console.log(result)
+      if (result === true) {
+        return res.status(200).send({ error: 'no valid timeslot' })
+      }
+    }
 
     await db.updateTask(appointmentId, { ...req.body, illnesses: illnesses?.join() })
+
+    return res.status(200).send({ success: 'true' })
+  } catch (err) {
+    console.log('Encountered error updating tasks', err)
+
+    res.status(500).send('server_error')
+  }
+}
+
+const deleteAppointment = async (req, res) => {
+  try {
+    const appointmentId = req.params.appointment_id
+
+    const task = await db.fetchAppointment(appointmentId)
+
+    console.log('GOT APPOINTMENTS')
+    // TODO: We should different error codes. Right now we throw 500 for everything
+    if (task.length === 0) { throw Error(`Unable to find appointment id ${appointmentId}`) }
+
+    console.log('ABOUT TO DELETE ')
+    await db.deleteAppointment(appointmentId)
 
     res.status(200).send()
   } catch (err) {
@@ -85,5 +173,6 @@ module.exports = {
   registerDoctor,
   fetchDoctorAppointments,
   updateAppointment,
-  fetchDoctors
+  fetchDoctors,
+  deleteAppointment
 }

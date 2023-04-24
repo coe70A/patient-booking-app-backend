@@ -205,6 +205,25 @@ class DbService {
     }
   }
 
+  async deleteAppointment (appointmentId) {
+    try {
+      const response = await new Promise((resolve, reject) => {
+        const query = 'DELETE FROM appointment WHERE id = $1'
+        connection.query(query, [appointmentId], (error, result) => {
+          if (error) {
+            reject(new Error(error.message))
+          } else {
+            resolve(result.rows)
+          }
+        })
+      })
+      return response
+    } catch (error) {
+      console.log(error.message)
+      throw error
+    }
+  }
+
   async fetchDoctor (email) {
     try {
       const response = await new Promise((resolve, reject) => {

@@ -17,6 +17,26 @@ const registerUser = async (req, res) => {
 const createAppointment = async (req, res) => {
   try {
     console.log('before create appointmnet')
+    // eslint-disable-next-line camelcase
+    const { doctor_id, schedule_date } = req.body
+    const doctorApp = await db.fetchDoctorAppointments(doctor_id)
+    console.log('DOCTOR APP')
+    console.log(doctorApp)
+
+    let valid = false
+
+    const givenScheduleDate = new Date(schedule_date)
+    for (let i = 0; i < doctorApp.length; i++) {
+      const appointment = doctorApp[i]
+      const appointmentScheduleDate = new Date(appointment.schedule_date)
+      if (givenScheduleDate === appointmentScheduleDate) {
+        valid = true // Given appointment falls within the schedule date
+      }
+    }
+
+    console.log('IS VALID?>>>>>????')
+    console.log(valid)
+
     await db.createAppointment(req.body)
 
     res.status(200).send({ code: 200 })

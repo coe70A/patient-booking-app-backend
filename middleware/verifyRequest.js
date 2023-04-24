@@ -29,8 +29,8 @@ const schemas = {
   }),
   createAppointment: Joi.object({
     doctor_id: Joi.string(),
-    patient_id: Joi.string(),
-    schedule_date: Joi.string(),
+    patient_id: Joi.string().allow(null),
+    schedule_date: Joi.string().allow(null),
     appointment_name: Joi.string(),
     description: Joi.string(),
     illnesses: Joi.string().allow(null),
