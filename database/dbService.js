@@ -12,11 +12,17 @@ const instance = null
 // TODO: Add these config vars to .env file
 // For now it doesn't matter since these creds aren't going to be used in PROD
 const connection = new PostgresPool({
-  host: 'localhost',
-  user: 'postgres',
-  password: 'password',
-  database: 'capstone',
-  port: '5432'
+  //   host: 'localhost',
+  // user: 'postgres',
+  // password: 'password',
+  // database: 'postgres',
+  // port: '5432'
+  host: 'paacapestone.postgres.database.azure.com',
+  user: 'danielSadig@paacapestone',
+  password: '@Password',
+  database: 'postgres',
+  port: '5432',
+  ssl: true
 })
 
 // TODO: A lot of repeated logic here. Can probably collapse all of this down into a singular method

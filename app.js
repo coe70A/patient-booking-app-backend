@@ -19,6 +19,8 @@ app.use('/api/patient', patientRoutes)
 app.use('/api/doctor', doctorRoutes)
 app.use('/api/user', userRoutes)
 
-const port = 5000
-
+// const port = 8080;
+const port = 5000;
+// const HOST = '0.0.0.0';
+console.log("Hello There")
 app.listen(port, () => console.log('Listening....'))
