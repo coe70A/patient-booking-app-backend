@@ -81,9 +81,23 @@ const checkIfAppointmentFallsWithinSchedule = (appointments, givenAppointment) =
       // appointmentScheduleDate.setSeconds(0)
       console.log(appointmentScheduleDate)
 
-      console.log('given: ', givenScheduleDate.toDateString())
-      console.log('compare to : ', appointmentScheduleDate.toDateString())
-      if (givenScheduleDate.toDateString() === appointmentScheduleDate.toDateString()) {
+      const duration = appointment.duration * 60000
+
+      console.log('given: ', givenScheduleDate.getTime())
+      console.log('compare to : ', appointmentScheduleDate.getTime())
+      // if (duration && (givenScheduleDate.getTime() >= appointmentScheduleDate.getTime() || givenScheduleDate.getTime() <= appointmentScheduleDate.getTime() + duration)) {
+      //   console.log('FOUND ONE')
+      //   console.log('givenScheduleDate')
+      //   console.log(givenScheduleDate)
+      //   console.log('appointmentScheduleDate')
+      //   console.log(appointmentScheduleDate)
+      //   console.log(appointment)
+      //   return true // Given appointment falls within the schedule date
+      // }
+
+      // console.log('given: ', givenScheduleDate.toDateString())
+      // console.log('compare to : ', appointmentScheduleDate.toDateString())
+      if (givenScheduleDate.getTime() >= appointmentScheduleDate.getTime() && givenScheduleDate.getTime() <= appointmentScheduleDate.getTime() + duration) {
         console.log('FOUND ONE')
         console.log('givenScheduleDate')
         console.log(givenScheduleDate)
@@ -120,6 +134,8 @@ const updateAppointment = async (req, res) => {
     console.log(req.body)
 
     const appt = task[0]
+
+    // const duration = req.body.duration
 
     if (req.body.schedule_date) {
       const doctorApp = await db.fetchDoctorAppointments(appt.doctor_id)
